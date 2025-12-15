@@ -37,7 +37,7 @@ module.exports = mod;
 }),
 "[project]/app/api/content/generate/route.ts [app-route] (ecmascript)", ((__turbopack_context__, module, exports) => {
 
-const e = new Error("Could not parse module '[project]/app/api/content/generate/route.ts'\n\nUnterminated template");
+const e = new Error("Could not parse module '[project]/app/api/content/generate/route.ts'\n\nExpected a semicolon");
 e.code = 'MODULE_UNPARSABLE';
 throw e;
 }),

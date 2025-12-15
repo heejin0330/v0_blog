@@ -16,7 +16,7 @@ import { TemplateSelector } from "@/components/template-selector";
 import { GenerationProgress } from "@/components/generation-progress";
 import { CompletionCard } from "@/components/completion-card";
 import { ContentPreview } from "@/components/content-preview";
-import { Watch, ArrowLeft, Settings, HelpCircle, Loader2 } from "lucide-react";
+import { Watch, ArrowLeft, Settings, HelpCircle, Loader2, Check, ExternalLink } from "lucide-react"; // 아이콘 추가
 
 type WorkspaceStep = "input" | "confirm" | "generating" | "completed";
 
@@ -32,6 +32,14 @@ interface GenerationResult {
   wpPostUrl: string;
 }
 
+// [NEW] 검색 결과 타입 정의
+interface SearchResultItem {
+  title: string;
+  url: string;
+  content: string;
+  selected: boolean;
+}
+
 function WorkspaceContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -45,12 +53,15 @@ function WorkspaceContent() {
   const [includeImages, setIncludeImages] = useState(true);
   const [selectedTemplate, setSelectedTemplate] = useState("detailed_review");
   
-  // [NEW] 추가된 상태: 어조(Tone)와 깊이(Depth)
+  // 어조(Tone)와 깊이(Depth)
   const [tone, setTone] = useState("informative");
   const [depth, setDepth] = useState("deep");
 
   const [isSearching, setIsSearching] = useState(false);
   const [modelInfo, setModelInfo] = useState<WatchModelInfo | null>(null);
+  
+  // [NEW] 검색 결과 상태 관리
+  const [searchResults, setSearchResults] = useState<SearchResultItem[]>([]);
   
   const [generationSteps, setGenerationSteps] = useState([
     { id: "search", label: "웹 정보 수집 중...", status: "pending" as const },
@@ -109,24 +120,38 @@ function WorkspaceContent() {
     }
   }, []);
 
+  // [UPDATE] 검색 핸들러 수정: 모델 정보 + 웹 검색 결과 동시 호출
   const handleSearch = async () => {
     if (!modelName.trim()) return;
 
     setIsSearching(true);
     setStep("confirm");
+    setSearchResults([]); // 검색 결과 초기화
 
     try {
-      const response = await fetch("/api/watch/search", {
+      // 1. 모델 기본 정보 검색 (DB 또는 Tavily 간단 검색)
+      const infoPromise = fetch("/api/watch/search", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ modelName }),
-      });
+      }).then(res => res.json());
 
-      if (response.ok) {
-        const data = await response.json();
-        setModelInfo(data);
+      // 2. [NEW] 웹 검색 결과 가져오기 (검수용)
+      // /api/search/raw API가 구현되어 있어야 합니다.
+      const searchPromise = fetch("/api/search/raw", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query: `${modelName} watch review specs` }),
+      }).then(res => res.json()).catch(() => ({ results: [] })); // 실패해도 진행
+
+      // 병렬 처리
+      const [infoData, searchData] = await Promise.all([infoPromise, searchPromise]);
+
+      // 모델 정보 설정
+      if (infoData) {
+        setModelInfo(infoData);
       } else {
-        // Mock data fallback
+        // Fallback Mock Data
         setModelInfo({
           brand: "Rolex",
           modelName: "Submariner Date",
@@ -140,8 +165,22 @@ function WorkspaceContent() {
           thumbnailUrl: "/rolex-submariner-watch.jpg",
         });
       }
-    } catch {
-      // Mock data fallback
+
+      // [NEW] 검색 결과 설정
+      if (searchData && searchData.results) {
+        setSearchResults(
+          searchData.results.map((item: any) => ({
+            title: item.title,
+            url: item.url,
+            content: item.content,
+            selected: true, // 기본값: 모두 선택
+          }))
+        );
+      }
+
+    } catch (error) {
+      console.error("Search error:", error);
+      // Fallback
       setModelInfo({
         brand: "Rolex",
         modelName: "Submariner Date",
@@ -157,6 +196,13 @@ function WorkspaceContent() {
     } finally {
       setIsSearching(false);
     }
+  };
+
+  // [NEW] 검색 결과 토글 함수
+  const toggleSearchResult = (index: number) => {
+    setSearchResults(prev => 
+      prev.map((item, i) => i === index ? { ...item, selected: !item.selected } : item)
+    );
   };
 
   const handleConfirm = async () => {
@@ -178,6 +224,12 @@ function WorkspaceContent() {
       );
     };
 
+    // [NEW] 선택된 검색 결과만 필터링하여 텍스트로 변환
+    const curatedContext = searchResults
+      .filter(item => item.selected)
+      .map(item => `[Title: ${item.title}] ${item.content}`)
+      .join("\n\n");
+
     try {
       // Step 1: Search
       updateStep("search", "active");
@@ -187,7 +239,7 @@ function WorkspaceContent() {
       // Step 2: Generate
       updateStep("generate", "active");
 
-      // [UPDATE] 실제 콘텐츠 생성 API 호출 (tone, depth 추가)
+      // [UPDATE] customSearchContext 포함하여 전송
       const generateResponse = await fetch("/api/content/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -197,8 +249,9 @@ function WorkspaceContent() {
           templateType: selectedTemplate,
           includeImages,
           modelInfo,
-          tone,  // [NEW] 선택된 어조 전송
-          depth, // [NEW] 선택된 깊이 전송
+          tone, 
+          depth,
+          customSearchContext: curatedContext // 👈 정제된 데이터 전송
         }),
       });
 
@@ -297,6 +350,7 @@ function WorkspaceContent() {
   const handleReject = () => {
     setStep("input");
     setModelInfo(null);
+    setSearchResults([]);
   };
 
   const handleRetry = () => {
@@ -309,6 +363,7 @@ function WorkspaceContent() {
     setModelName("");
     setModelAlias("");
     setModelInfo(null);
+    setSearchResults([]);
     setGenerationResult(null);
     setGenerationSteps([
       { id: "search", label: "웹 정보 수집 중...", status: "pending" },
@@ -477,7 +532,7 @@ function WorkspaceContent() {
               </div>
             </div>
 
-            {/* [NEW] Writing Style Setting Section */}
+            {/* Writing Style Setting Section */}
             {(step === "confirm" || step === "input") && (
               <div className="rounded-xl border border-border bg-card p-6">
                  <h2 className="font-serif text-xl font-semibold text-foreground">
@@ -571,13 +626,79 @@ function WorkspaceContent() {
             )}
 
             {step === "confirm" && (
-              <ModelConfirmCard
-                modelInfo={modelInfo}
-                isLoading={isSearching}
-                onConfirm={handleConfirm}
-                onReject={handleReject}
-                onRetry={handleRetry}
-              />
+              <div className="space-y-6">
+                {/* 모델 정보 확인 카드 */}
+                <ModelConfirmCard
+                  modelInfo={modelInfo}
+                  isLoading={isSearching}
+                  onConfirm={handleConfirm}
+                  onReject={handleReject}
+                  onRetry={handleRetry}
+                  // ModelConfirmCard에 자체적인 버튼이 있다면 아래 검색 결과 UI와 함께 보일 때 레이아웃 고려 필요
+                  // 여기서는 ModelConfirmCard가 단순히 정보를 보여주는 용도라고 가정하거나
+                  // onConfirm이 눌리면 handleConfirm이 실행되도록 연결됨
+                />
+
+                {/* [NEW] 검색 결과 검수 UI */}
+                <div className="rounded-xl border border-border bg-card p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold flex items-center gap-2">
+                      <span>🔎 검색 정보 필터링</span>
+                    </h3>
+                    <span className="text-xs font-medium text-muted-foreground bg-secondary px-2 py-1 rounded">
+                      부정확한 정보는 체크 해제하세요
+                    </span>
+                  </div>
+                  
+                  <div className="space-y-3 max-h-80 overflow-y-auto pr-2 custom-scrollbar">
+                    {searchResults.length > 0 ? (
+                      searchResults.map((result, index) => (
+                        <div 
+                          key={index} 
+                          className={`flex gap-3 p-3 rounded-lg border transition-all cursor-pointer ${
+                            result.selected 
+                            ? "border-primary/50 bg-primary/5" 
+                            : "border-border bg-muted/30 opacity-60"
+                          }`}
+                          onClick={() => toggleSearchResult(index)}
+                        >
+                          <div className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded border transition-colors ${
+                            result.selected 
+                              ? "bg-primary border-primary text-primary-foreground" 
+                              : "border-muted-foreground/30 bg-background"
+                          }`}>
+                            {result.selected && <Check className="h-3 w-3" />}
+                          </div>
+                          <div className="flex-1 overflow-hidden">
+                            <div className="flex items-center gap-2 mb-1">
+                              <h4 className="font-medium text-sm truncate">{result.title}</h4>
+                              {result.url && (
+                                <a 
+                                  href={result.url} 
+                                  target="_blank" 
+                                  rel="noreferrer" 
+                                  onClick={(e) => e.stopPropagation()}
+                                  className="text-muted-foreground hover:text-primary"
+                                >
+                                  <ExternalLink className="h-3 w-3" />
+                                </a>
+                              )}
+                            </div>
+                            <p className="text-xs text-muted-foreground line-clamp-2">
+                              {result.content}
+                            </p>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="text-center py-6 text-sm text-muted-foreground">
+                        <p>검색 결과가 없습니다.</p>
+                        <p className="mt-1 text-xs">AI가 보유한 일반 지식으로 작성합니다.</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
             )}
 
             {step === "generating" && (

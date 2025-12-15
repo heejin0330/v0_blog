@@ -135,7 +135,7 @@ async function POST(req) {
                 status: 500
             });
         }
-        const { modelName, modelAlias, templateType, includeImages, modelInfo, tone = "informative", depth = "deep" } = await req.json();
+        const { modelName, modelAlias, templateType, includeImages, modelInfo, tone = "informative", depth = "deep", customSearchContext } = await req.json();
         if (!modelName) {
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
                 success: false,
@@ -156,32 +156,40 @@ async function POST(req) {
         console.log(`[1/3] Searching for: ${officialName}...`);
         const tavilyApiKey = process.env.TAVILY_API_KEY;
         let searchContext = "";
-        if (tavilyApiKey) {
-            try {
-                const searchResponse = await fetch("https://api.tavily.com/search", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        api_key: tavilyApiKey,
-                        // 검색은 정확도를 위해 '공식 명칭'으로 수행
-                        query: `${brand} ${officialName} review history specs price pros cons`,
-                        search_depth: "basic",
-                        include_answer: true,
-                        max_results: 5
-                    })
-                });
-                if (searchResponse.ok) {
-                    const searchData = await searchResponse.json();
-                    if (searchData.results) {
-                        searchContext = searchData.results.map((r)=>`[Source: ${r.title}] ${r.content}`).join("\n\n");
+        // 1. 사용자가 직접 검수한 데이터가 있으면 그걸 최우선으로 사용
+        if (customSearchContext && customSearchContext.length > 0) {
+            console.log(`[1/3] Using curated search context from frontend.`);
+            searchContext = customSearchContext;
+        } else {
+            console.log(`[1/3] Searching via Tavily (Fallback)...`);
+            const tavilyApiKey = process.env.TAVILY_API_KEY;
+            if (tavilyApiKey) {
+                try {
+                    const searchResponse = await fetch("https://api.tavily.com/search", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            api_key: tavilyApiKey,
+                            // 검색은 정확도를 위해 '공식 명칭'으로 수행
+                            query: `${brand} ${officialName} review history specs price pros cons`,
+                            search_depth: "basic",
+                            include_answer: true,
+                            max_results: 5
+                        })
+                    });
+                    if (searchResponse.ok) {
+                        const searchData = await searchResponse.json();
+                        if (searchData.results) {
+                            searchContext = searchData.results.map((r)=>`[Source: ${r.title}] ${r.content}`).join("\n\n");
+                        }
                     }
+                } catch (e) {
+                    console.warn("Search failed, proceeding without it.");
                 }
-            } catch (e) {
-                console.warn("Search failed, proceeding without it.");
             }
-        }
+        } // end fallback search block
         // ---------------------------------------------------------
         // STEP 2: 프롬프트 엔지니어링 (Tone, Depth, SEO Name 반영)
         // ---------------------------------------------------------
@@ -207,7 +215,7 @@ async function POST(req) {
       - 주제: ${officialName} ${nickname ? `(별칭: ${nickname})` : ""}
       - 브랜드: ${brand}
       - 타겟 독자: 시계 구매를 고려하거나 정보를 찾는 3040 남성
-      - 톤앤매너: ${toneInstructions[tone] || toneInstructions['informative']}
+      - 톤앤매너: ${toneInstructions[tone] || toneInstructions["informative"]}
       
       [강력한 SEO 필수 지침 (중요)]
       1. **제목**: 반드시 '${officialName}'(공식 모델명)과 '${nickname}'(별칭)을 자연스럽게 섞어서 작성할 것. (예: 롤렉스 ${officialName} '${nickname}' 완벽 리뷰)
@@ -218,7 +226,7 @@ async function POST(req) {
       ${depthInstruction}
 
       [필수 구조 (JSON 포맷)]
-      반드시 아래 JSON 형식을 지키세요. 마크다운(\`\`\`) 없이 순수 JSON만 반환하세요.
+      반드시 아래 JSON 형식을 지키세요. 마크다운 코드 블록 없이 순수 JSON만 반환하세요.
       {
         "title": "SEO 최적화된 제목",
         "excerpt": "구글 검색 결과용 150자 요약",
@@ -288,7 +296,7 @@ async function POST(req) {
             officialName,
             `${brand} ${officialName}`,
             nickname,
-            modelInfo?.modelName // 4순위: 기타
+            modelInfo?.modelName
         ].filter((k)=>Boolean(k) && k !== "");
         // SEO 점수 계산
         const seoScore = calculateSEOScore(aiOutput.title, aiOutput.excerpt, blockContent, images, seoKeywords // 보강된 키워드 전달

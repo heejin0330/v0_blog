@@ -1,4 +1,5 @@
 {
+  "/_not-found/page": "app/_not-found/page.js",
   "/api/content/generate/route": "app/api/content/generate/route.js",
   "/api/watch/search/route": "app/api/watch/search/route.js",
   "/api/wordpress/get-settings/route": "app/api/wordpress/get-settings/route.js",

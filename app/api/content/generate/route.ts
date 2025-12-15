@@ -44,8 +44,10 @@ function convertToWPBlocks(sections: Section[]): string {
         case "p":
           return `\n<p>${String(section.content)}</p>\n`;
         case "blockquote":
-          return `\n<blockquote class="wp-block-quote"><p>${String(section.content)}</p></blockquote>\n`;
-        
+          return `\n<blockquote class="wp-block-quote"><p>${String(
+            section.content
+          )}</p></blockquote>\n`;
+
         // ▼▼▼ [수정 1] 리스트 점(Bullet) 오류 해결 로직 ▼▼▼
         case "ul":
           let items: string[] = [];
@@ -59,10 +61,10 @@ function convertToWPBlocks(sections: Section[]): string {
 
           const listItems = items
             .map((item) => String(item).trim()) // 1. 앞뒤 공백 제거
-            .filter((item) => item.length > 0)  // 2. 빈 줄(내용 없는 점) 제거
+            .filter((item) => item.length > 0) // 2. 빈 줄(내용 없는 점) 제거
             .map((item) => {
               // 3. AI가 텍스트 앞에 붙인 기호(-, *, •) 제거 (이중 점 방지)
-              const cleanItem = item.replace(/^[-•*]\s*/, ""); 
+              const cleanItem = item.replace(/^[-•*]\s*/, "");
               return `<li>${cleanItem}</li>`;
             })
             .join("");
@@ -87,7 +89,7 @@ function calculateSEOScore(
 ): number {
   let score = 0;
   const maxScore = 100;
-  
+
   // keywords[0]은 가장 중요한 '공식 모델명'
   const primaryKeyword = keywords[0] || "";
 
@@ -97,15 +99,20 @@ function calculateSEOScore(
   else score += 3;
 
   // 2. 제목 키워드 포함
-  if (primaryKeyword && title.toLowerCase().includes(primaryKeyword.toLowerCase())) score += 10;
+  if (
+    primaryKeyword &&
+    title.toLowerCase().includes(primaryKeyword.toLowerCase())
+  )
+    score += 10;
 
   // 3. 메타 설명 길이 (120-160자)
-  if (metaDescription.length >= 120 && metaDescription.length <= 160) score += 15;
+  if (metaDescription.length >= 120 && metaDescription.length <= 160)
+    score += 15;
   else if (metaDescription.length > 50) score += 7;
 
   // 4. 콘텐츠 길이 (애드센스 타겟: 1500자 이상 권장)
   const contentText = content.replace(/<[^>]*>/g, "");
-  if (contentText.length >= 1500) score += 20; 
+  if (contentText.length >= 1500) score += 20;
   else if (contentText.length >= 1000) score += 15;
   else if (contentText.length >= 500) score += 10;
   else score += 2;
@@ -113,12 +120,16 @@ function calculateSEOScore(
   // 5. 헤딩 태그 구조
   const h2Count = (content.match(/<h2/g) || []).length;
   if (h2Count >= 3) score += 10;
-  
+
   // 6. 이미지 유무
   if (images.length > 0) score += 10;
 
   // 7. 키워드 밀도 (본문에 키워드가 있는지)
-  if (primaryKeyword && contentText.toLowerCase().includes(primaryKeyword.toLowerCase())) score += 10;
+  if (
+    primaryKeyword &&
+    contentText.toLowerCase().includes(primaryKeyword.toLowerCase())
+  )
+    score += 10;
 
   return Math.min(Math.round(score), maxScore);
 }
@@ -126,28 +137,35 @@ function calculateSEOScore(
 export async function POST(req: Request) {
   try {
     if (!apiKey) {
-      return NextResponse.json({ success: false, error: "API Key Missing" }, { status: 500 });
+      return NextResponse.json(
+        { success: false, error: "API Key Missing" },
+        { status: 500 }
+      );
     }
 
-    const { 
-      modelName, 
-      modelAlias, 
-      templateType, 
-      includeImages, 
+    const {
+      modelName,
+      modelAlias,
+      templateType,
+      includeImages,
       modelInfo,
-      tone = "informative", 
-      depth = "deep"        
+      tone = "informative",
+      depth = "deep",
+      customSearchContext,
     } = await req.json();
 
     if (!modelName) {
-      return NextResponse.json({ success: false, error: "모델명이 없습니다." }, { status: 400 });
+      return NextResponse.json(
+        { success: false, error: "모델명이 없습니다." },
+        { status: 400 }
+      );
     }
 
     // ---------------------------------------------------------
     // [수정 2] 이름 변수 분리 (닉네임 오버라이딩 방지)
     // ---------------------------------------------------------
     const officialName = modelName; // 예: Rolex Submariner 126610LV
-    const nickname = modelAlias;    // 예: 스타벅스
+    const nickname = modelAlias; // 예: 스타벅스
     const brand = modelInfo?.brand || "Brand";
 
     // ---------------------------------------------------------
@@ -156,34 +174,44 @@ export async function POST(req: Request) {
     console.log(`[1/3] Searching for: ${officialName}...`);
     const tavilyApiKey = process.env.TAVILY_API_KEY;
     let searchContext = "";
-
-    if (tavilyApiKey) {
-      try {
-        const searchResponse = await fetch("https://api.tavily.com/search", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            api_key: tavilyApiKey,
-            // 검색은 정확도를 위해 '공식 명칭'으로 수행
-            query: `${brand} ${officialName} review history specs price pros cons`,
-            search_depth: "basic",
-            include_answer: true,
-            max_results: 5,
-          }),
-        });
-
-        if (searchResponse.ok) {
-          const searchData = await searchResponse.json();
-          if (searchData.results) {
-            searchContext = searchData.results
-              .map((r: any) => `[Source: ${r.title}] ${r.content}`)
-              .join("\n\n");
-          }
-        }
-      } catch (e) {
-        console.warn("Search failed, proceeding without it.");
-      }
+    // 1. 사용자가 직접 검수한 데이터가 있으면 그걸 최우선으로 사용
+    if (customSearchContext && customSearchContext.length > 0) {
+      console.log(`[1/3] Using curated search context from frontend.`);
+      searchContext = customSearchContext;
     }
+    // 2. 없으면 기존처럼 백엔드에서 직접 검색 (Fallback)
+    else {
+      console.log(`[1/3] Searching via Tavily (Fallback)...`);
+      const tavilyApiKey = process.env.TAVILY_API_KEY;
+
+      if (tavilyApiKey) {
+        try {
+          const searchResponse = await fetch("https://api.tavily.com/search", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              api_key: tavilyApiKey,
+              // 검색은 정확도를 위해 '공식 명칭'으로 수행
+              query: `${brand} ${officialName} review history specs price pros cons`,
+              search_depth: "basic",
+              include_answer: true,
+              max_results: 5,
+            }),
+          });
+
+          if (searchResponse.ok) {
+            const searchData = await searchResponse.json();
+            if (searchData.results) {
+              searchContext = searchData.results
+                .map((r: any) => `[Source: ${r.title}] ${r.content}`)
+                .join("\n\n");
+            }
+          }
+        } catch (e) {
+          console.warn("Search failed, proceeding without it.");
+        }
+      }
+    } // end fallback search block
 
     // ---------------------------------------------------------
     // STEP 2: 프롬프트 엔지니어링 (Tone, Depth, SEO Name 반영)
@@ -193,20 +221,23 @@ export async function POST(req: Request) {
     // 어조 설정
     const toneInstructions: Record<string, string> = {
       informative: "객관적이고 전문적인 저널리스트 톤 ('~합니다/습니다' 체)",
-      storytelling: "오래된 시계 수집가의 경험담 톤, 감성적 표현 포함 ('~해요/하죠' 체)",
+      storytelling:
+        "오래된 시계 수집가의 경험담 톤, 감성적 표현 포함 ('~해요/하죠' 체)",
       critical: "날카롭고 분석적인 평론가 톤, 장단점을 명확히 구분 ('~다' 체)",
-      friendly: "친절한 이웃 형/오빠가 설명해주는 톤 ('~야/해' 반말 모드 혹은 친근한 존댓말)"
+      friendly:
+        "친절한 이웃 형/오빠가 설명해주는 톤 ('~야/해' 반말 모드 혹은 친근한 존댓말)",
     };
 
     // 깊이 설정
-    const depthInstruction = depth === "deep" 
-      ? `
+    const depthInstruction =
+      depth === "deep"
+        ? `
         [분량 및 깊이 필수]
         - 반드시 전체 글자 수(공백 제외) 1,500자 이상 작성할 것.
         - 단순 스펙 나열을 넘어 '왜 이 스펙이 중요한지' 분석할 것.
         - 마지막에 '자주 묻는 질문(FAQ)' 섹션을 h2로 만들고 3가지 질문/답변을 포함할 것.
-      ` 
-      : `[분량] 핵심 위주로 간결하게 800자 내외로 작성할 것.`;
+      `
+        : `[분량] 핵심 위주로 간결하게 800자 내외로 작성할 것.`;
 
     const systemInstruction = `
       당신은 대한민국 최고의 빈티지 시계 전문 에디터입니다.
@@ -215,7 +246,7 @@ export async function POST(req: Request) {
       - 주제: ${officialName} ${nickname ? `(별칭: ${nickname})` : ""}
       - 브랜드: ${brand}
       - 타겟 독자: 시계 구매를 고려하거나 정보를 찾는 3040 남성
-      - 톤앤매너: ${toneInstructions[tone] || toneInstructions['informative']}
+      - 톤앤매너: ${toneInstructions[tone] || toneInstructions["informative"]}
       
       [강력한 SEO 필수 지침 (중요)]
       1. **제목**: 반드시 '${officialName}'(공식 모델명)과 '${nickname}'(별칭)을 자연스럽게 섞어서 작성할 것. (예: 롤렉스 ${officialName} '${nickname}' 완벽 리뷰)
@@ -226,7 +257,7 @@ export async function POST(req: Request) {
       ${depthInstruction}
 
       [필수 구조 (JSON 포맷)]
-      반드시 아래 JSON 형식을 지키세요. 마크다운(\`\`\`) 없이 순수 JSON만 반환하세요.
+      반드시 아래 JSON 형식을 지키세요. 마크다운 코드 블록 없이 순수 JSON만 반환하세요.
       {
         "title": "SEO 최적화된 제목",
         "excerpt": "구글 검색 결과용 150자 요약",
@@ -251,7 +282,12 @@ export async function POST(req: Request) {
     `;
 
     // Gemini 모델 호출
-    let modelOptions = ["gemini-2.0-flash", "gemini-1.5-pro", "gemini-1.5-flash", "gemini-pro"];
+    let modelOptions = [
+      "gemini-2.0-flash",
+      "gemini-1.5-pro",
+      "gemini-1.5-flash",
+      "gemini-pro",
+    ];
     let aiOutput: AIOutput | null = null;
 
     for (const modelNameOption of modelOptions) {
@@ -264,11 +300,11 @@ export async function POST(req: Request) {
 
         const result = await model.generateContent(userPrompt);
         aiOutput = JSON.parse(result.response.text());
-        if (aiOutput?.sections) break; 
+        if (aiOutput?.sections) break;
       } catch (e: any) {
         console.warn(`Model ${modelNameOption} failed:`, e.message);
-        if (e.message.includes("429")) continue; 
-        if (e.message.includes("404")) continue; 
+        if (e.message.includes("429")) continue;
+        if (e.message.includes("404")) continue;
       }
     }
 
@@ -282,21 +318,23 @@ export async function POST(req: Request) {
     console.log(`[3/3] Converting results...`);
 
     const blockContent = convertToWPBlocks(aiOutput.sections);
-    
+
     // 이미지 처리 (placeholder)
     const images = includeImages
-      ? ["front", "side", "back"].map(type => ({
-          url: `/placeholder.svg?height=400&width=400&query=${encodeURIComponent(`${officialName} watch ${type}`)}`,
-          alt: `${officialName} ${type}`
+      ? ["front", "side", "back"].map((type) => ({
+          url: `/placeholder.svg?height=400&width=400&query=${encodeURIComponent(
+            `${officialName} watch ${type}`
+          )}`,
+          alt: `${officialName} ${type}`,
         }))
       : [];
 
     // [수정 3] SEO 키워드 로직 보강
     const seoKeywords = [
-      officialName,               // 1순위: 공식 모델명 (가장 중요)
+      officialName, // 1순위: 공식 모델명 (가장 중요)
       `${brand} ${officialName}`, // 2순위: 브랜드 + 모델명
-      nickname,                   // 3순위: 별칭
-      modelInfo?.modelName        // 4순위: 기타
+      nickname, // 3순위: 별칭
+      modelInfo?.modelName, // 4순위: 기타
     ].filter((k): k is string => Boolean(k) && k !== "");
 
     // SEO 점수 계산
@@ -313,14 +351,13 @@ export async function POST(req: Request) {
       data: {
         title: aiOutput.title,
         content: blockContent,
-        metaDescription: aiOutput.excerpt, 
-        tags: aiOutput.tags,               
+        metaDescription: aiOutput.excerpt,
+        tags: aiOutput.tags,
         wordCount: blockContent.replace(/<[^>]*>/g, "").length,
         seoScore,
         images,
       },
     });
-
   } catch (error: any) {
     console.error("API Error:", error);
     return NextResponse.json(
