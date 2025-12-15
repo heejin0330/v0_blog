@@ -38,44 +38,50 @@ function WorkspaceContent() {
   const initialModel = searchParams.get("model") || "";
 
   const [step, setStep] = useState<WorkspaceStep>("input");
+  
+  // 입력 상태 관리
   const [modelName, setModelName] = useState(initialModel);
   const [modelAlias, setModelAlias] = useState("");
   const [includeImages, setIncludeImages] = useState(true);
   const [selectedTemplate, setSelectedTemplate] = useState("detailed_review");
+  
+  // [NEW] 추가된 상태: 어조(Tone)와 깊이(Depth)
+  const [tone, setTone] = useState("informative");
+  const [depth, setDepth] = useState("deep");
+
   const [isSearching, setIsSearching] = useState(false);
   const [modelInfo, setModelInfo] = useState<WatchModelInfo | null>(null);
+  
   const [generationSteps, setGenerationSteps] = useState([
     { id: "search", label: "웹 정보 수집 중...", status: "pending" as const },
     { id: "generate", label: "콘텐츠 생성 중...", status: "pending" as const },
     { id: "seo", label: "SEO 최적화 중...", status: "pending" as const },
     { id: "save", label: "워드프레스 저장 중...", status: "pending" as const },
   ]);
-  const [generationResult, setGenerationResult] =
-    useState<GenerationResult | null>(null);
+  
+  const [generationResult, setGenerationResult] = useState<GenerationResult | null>(null);
   const [wpSettings, setWpSettings] = useState<{
     siteUrl: string;
     username?: string;
     appPassword?: string;
   } | null>(null);
+  
   const [showImagePreview, setShowImagePreview] = useState(false);
 
   // Load WP settings from .env or localStorage
   useEffect(() => {
     const loadSettings = async () => {
       try {
-        // 먼저 .env 설정 확인
         const response = await fetch("/api/wordpress/get-settings");
         if (response.ok) {
           const data = await response.json();
           if (data.hasEnvSettings) {
-            // .env 설정이 있으면 사용 (서버에서 자동으로 사용되므로 siteUrl만 필요)
             setWpSettings({
               siteUrl: data.siteUrl || "",
             });
             return;
           }
         }
-        // .env 설정이 없으면 localStorage에서 로드
         const saved = localStorage.getItem("wp_settings");
         if (saved) {
           const parsed = JSON.parse(saved);
@@ -83,15 +89,12 @@ function WorkspaceContent() {
         }
       } catch (error) {
         console.error("Failed to load settings:", error);
-        // 에러 발생 시 localStorage에서 로드 시도
         const saved = localStorage.getItem("wp_settings");
         if (saved) {
           try {
             const parsed = JSON.parse(saved);
             setWpSettings(parsed);
-          } catch {
-            // JSON 파싱 실패 시 무시
-          }
+          } catch {}
         }
       }
     };
@@ -123,7 +126,7 @@ function WorkspaceContent() {
         const data = await response.json();
         setModelInfo(data);
       } else {
-        // Mock data for demo
+        // Mock data fallback
         setModelInfo({
           brand: "Rolex",
           modelName: "Submariner Date",
@@ -138,7 +141,7 @@ function WorkspaceContent() {
         });
       }
     } catch {
-      // Mock data for demo
+      // Mock data fallback
       setModelInfo({
         brand: "Rolex",
         modelName: "Submariner Date",
@@ -169,7 +172,6 @@ function WorkspaceContent() {
 
     setStep("generating");
 
-    // Simulate generation process
     const updateStep = (stepId: string, status: "active" | "completed") => {
       setGenerationSteps((prev) =>
         prev.map((s) => (s.id === stepId ? { ...s, status } : s))
@@ -185,7 +187,7 @@ function WorkspaceContent() {
       // Step 2: Generate
       updateStep("generate", "active");
 
-      // 실제 콘텐츠 생성 API 호출
+      // [UPDATE] 실제 콘텐츠 생성 API 호출 (tone, depth 추가)
       const generateResponse = await fetch("/api/content/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -195,6 +197,8 @@ function WorkspaceContent() {
           templateType: selectedTemplate,
           includeImages,
           modelInfo,
+          tone,  // [NEW] 선택된 어조 전송
+          depth, // [NEW] 선택된 깊이 전송
         }),
       });
 
@@ -218,8 +222,6 @@ function WorkspaceContent() {
       // Step 4: Save to WordPress
       updateStep("save", "active");
 
-      // 실제 워드프레스 저장 API 호출
-      // .env에 설정이 있으면 siteUrl, username, appPassword는 보내지 않아도 됨
       const requestBody: {
         title: string;
         content: string;
@@ -235,9 +237,6 @@ function WorkspaceContent() {
         tags: generateData.data.tags || [],
       };
 
-      // .env 설정이 없을 때만 body에 포함
-      // wpSettings에 siteUrl만 있다는 것은 .env가 아닐 수 있음
-      // 하지만 안전하게 하기 위해 siteUrl이 있으면 포함
       if (wpSettings.siteUrl) {
         requestBody.siteUrl = wpSettings.siteUrl;
       }
@@ -260,7 +259,6 @@ function WorkspaceContent() {
 
       updateStep("save", "completed");
 
-      // Set result with actual WordPress post data
       setGenerationResult({
         title: generateData.data.title,
         content: generateData.data.content,
@@ -276,7 +274,6 @@ function WorkspaceContent() {
       });
 
       setStep("completed");
-      // 저장 완료 후 자동으로 콘텐츠 및 이미지 미리보기 표시
       setShowImagePreview(true);
     } catch (error) {
       console.error("Generation error:", error);
@@ -286,7 +283,6 @@ function WorkspaceContent() {
           : "콘텐츠 생성 중 오류가 발생했습니다.";
       alert(errorMessage);
 
-      // 모든 단계를 pending으로 리셋
       setGenerationSteps([
         { id: "search", label: "웹 정보 수집 중...", status: "pending" },
         { id: "generate", label: "콘텐츠 생성 중...", status: "pending" },
@@ -345,20 +341,12 @@ function WorkspaceContent() {
             </span>
           </div>
           <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="text-muted-foreground"
-            >
+            <Button variant="ghost" size="icon" className="text-muted-foreground">
               <HelpCircle className="h-5 w-5" />
             </Button>
             <WordPressSettingsModal
               trigger={
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-muted-foreground"
-                >
+                <Button variant="ghost" size="icon" className="text-muted-foreground">
                   <Settings className="h-5 w-5" />
                 </Button>
               }
@@ -370,7 +358,6 @@ function WorkspaceContent() {
 
       {/* Main Content */}
       <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
-        {/* Back Button */}
         <Link
           href="/"
           className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
@@ -449,9 +436,7 @@ function WorkspaceContent() {
                     />
                     <Button
                       onClick={handleSearch}
-                      disabled={
-                        !modelName.trim() || step !== "input" || isSearching
-                      }
+                      disabled={!modelName.trim() || step !== "input" || isSearching}
                       className="bg-primary text-primary-foreground"
                     >
                       {isSearching ? (
@@ -485,15 +470,58 @@ function WorkspaceContent() {
                     }
                     disabled={step !== "input" && step !== "confirm"}
                   />
-                  <Label
-                    htmlFor="includeImages"
-                    className="text-sm font-normal"
-                  >
+                  <Label htmlFor="includeImages" className="text-sm font-normal">
                     이미지 수집 포함
                   </Label>
                 </div>
               </div>
             </div>
+
+            {/* [NEW] Writing Style Setting Section */}
+            {(step === "confirm" || step === "input") && (
+              <div className="rounded-xl border border-border bg-card p-6">
+                 <h2 className="font-serif text-xl font-semibold text-foreground">
+                  글 작성 스타일 설정
+                </h2>
+                <p className="mt-1 text-sm text-muted-foreground mb-4">
+                  AI가 작성할 글의 분위기와 분량을 설정합니다.
+                </p>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* 어조 선택 */}
+                  <div className="space-y-2">
+                    <Label htmlFor="toneSelect">글의 분위기 (Tone)</Label>
+                    <select
+                      id="toneSelect"
+                      value={tone}
+                      onChange={(e) => setTone(e.target.value)}
+                      disabled={step !== "input" && step !== "confirm"}
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      <option value="informative">📰 전문적인 정보 (기자)</option>
+                      <option value="storytelling">☕ 경험담/스토리 (블로거)</option>
+                      <option value="critical">⚖️ 장단점 분석 (평론가)</option>
+                      <option value="friendly">😊 친근한 설명 (이웃)</option>
+                    </select>
+                  </div>
+
+                  {/* 깊이 선택 */}
+                  <div className="space-y-2">
+                    <Label htmlFor="depthSelect">글 분량 (Depth)</Label>
+                    <select
+                      id="depthSelect"
+                      value={depth}
+                      onChange={(e) => setDepth(e.target.value)}
+                      disabled={step !== "input" && step !== "confirm"}
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      <option value="deep">📚 심층 분석 (1500자+)</option>
+                      <option value="basic">⚡ 기본 작성 (800자)</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Template Selector */}
             {(step === "confirm" || step === "input") && (

@@ -112,7 +112,8 @@ async function POST(request) {
             thumbnailUrl: `/placeholder.svg?height=128&width=128&query=${encodeURIComponent(modelName)} watch`
         };
         // Tavily API로 웹 검색 결과 가져오기
-        const searchQuery = `${watchInfo.brand} ${watchInfo.modelName} 스펙 사양`;
+        // "시계"를 기본 전제로 포함하여 검색 (닉네임 검색 지원)
+        const searchQuery = watchInfo.brand && watchInfo.brand !== watchInfo.modelName ? `${watchInfo.brand} ${watchInfo.modelName} watch 시계 스펙 사양` : `${watchInfo.modelName} watch 시계 스펙 사양`;
         const searchData = await searchWebWithTavily(searchQuery);
         // 검색 결과에서 사양 정보 추출
         const extractedSpecs = extractSpecsFromSearchResults(searchData.results, searchData.answer, watchInfo.modelName);

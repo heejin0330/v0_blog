@@ -2752,10 +2752,14 @@ function WorkspaceContent() {
     const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"])();
     const initialModel = searchParams.get("model") || "";
     const [step, setStep] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("input");
+    // 입력 상태 관리
     const [modelName, setModelName] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(initialModel);
     const [modelAlias, setModelAlias] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("");
     const [includeImages, setIncludeImages] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(true);
     const [selectedTemplate, setSelectedTemplate] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("detailed_review");
+    // [NEW] 추가된 상태: 어조(Tone)와 깊이(Depth)
+    const [tone, setTone] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("informative");
+    const [depth, setDepth] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("deep");
     const [isSearching, setIsSearching] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [modelInfo, setModelInfo] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [generationSteps, setGenerationSteps] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([
@@ -2789,19 +2793,16 @@ function WorkspaceContent() {
             const loadSettings = {
                 "WorkspaceContent.useEffect.loadSettings": async ()=>{
                     try {
-                        // 먼저 .env 설정 확인
                         const response = await fetch("/api/wordpress/get-settings");
                         if (response.ok) {
                             const data = await response.json();
                             if (data.hasEnvSettings) {
-                                // .env 설정이 있으면 사용 (서버에서 자동으로 사용되므로 siteUrl만 필요)
                                 setWpSettings({
                                     siteUrl: data.siteUrl || ""
                                 });
                                 return;
                             }
                         }
-                        // .env 설정이 없으면 localStorage에서 로드
                         const saved = localStorage.getItem("wp_settings");
                         if (saved) {
                             const parsed = JSON.parse(saved);
@@ -2809,15 +2810,12 @@ function WorkspaceContent() {
                         }
                     } catch (error) {
                         console.error("Failed to load settings:", error);
-                        // 에러 발생 시 localStorage에서 로드 시도
                         const saved = localStorage.getItem("wp_settings");
                         if (saved) {
                             try {
                                 const parsed = JSON.parse(saved);
                                 setWpSettings(parsed);
-                            } catch  {
-                            // JSON 파싱 실패 시 무시
-                            }
+                            } catch  {}
                         }
                     }
                 }
@@ -2851,7 +2849,7 @@ function WorkspaceContent() {
                 const data = await response.json();
                 setModelInfo(data);
             } else {
-                // Mock data for demo
+                // Mock data fallback
                 setModelInfo({
                     brand: "Rolex",
                     modelName: "Submariner Date",
@@ -2866,7 +2864,7 @@ function WorkspaceContent() {
                 });
             }
         } catch  {
-            // Mock data for demo
+            // Mock data fallback
             setModelInfo({
                 brand: "Rolex",
                 modelName: "Submariner Date",
@@ -2893,7 +2891,6 @@ function WorkspaceContent() {
             return;
         }
         setStep("generating");
-        // Simulate generation process
         const updateStep = (stepId, status)=>{
             setGenerationSteps((prev)=>prev.map((s)=>s.id === stepId ? {
                         ...s,
@@ -2907,7 +2904,7 @@ function WorkspaceContent() {
             updateStep("search", "completed");
             // Step 2: Generate
             updateStep("generate", "active");
-            // 실제 콘텐츠 생성 API 호출
+            // [UPDATE] 실제 콘텐츠 생성 API 호출 (tone, depth 추가)
             const generateResponse = await fetch("/api/content/generate", {
                 method: "POST",
                 headers: {
@@ -2918,7 +2915,9 @@ function WorkspaceContent() {
                     modelAlias,
                     templateType: selectedTemplate,
                     includeImages,
-                    modelInfo
+                    modelInfo,
+                    tone,
+                    depth
                 })
             });
             if (!generateResponse.ok) {
@@ -2936,17 +2935,12 @@ function WorkspaceContent() {
             updateStep("seo", "completed");
             // Step 4: Save to WordPress
             updateStep("save", "active");
-            // 실제 워드프레스 저장 API 호출
-            // .env에 설정이 있으면 siteUrl, username, appPassword는 보내지 않아도 됨
             const requestBody = {
                 title: generateData.data.title,
                 content: generateData.data.content,
                 metaDescription: generateData.data.metaDescription,
                 tags: generateData.data.tags || []
             };
-            // .env 설정이 없을 때만 body에 포함
-            // wpSettings에 siteUrl만 있다는 것은 .env가 아닐 수 있음
-            // 하지만 안전하게 하기 위해 siteUrl이 있으면 포함
             if (wpSettings.siteUrl) {
                 requestBody.siteUrl = wpSettings.siteUrl;
             }
@@ -2966,7 +2960,6 @@ function WorkspaceContent() {
                 throw new Error("워드프레스 저장 응답이 올바르지 않습니다.");
             }
             updateStep("save", "completed");
-            // Set result with actual WordPress post data
             setGenerationResult({
                 title: generateData.data.title,
                 content: generateData.data.content,
@@ -2979,13 +2972,11 @@ function WorkspaceContent() {
                 wpPostUrl: saveData.editUrl || `${wpSettings.siteUrl}/wp-admin/post.php?post=${saveData.postId}&action=edit`
             });
             setStep("completed");
-            // 저장 완료 후 자동으로 콘텐츠 및 이미지 미리보기 표시
             setShowImagePreview(true);
         } catch (error) {
             console.error("Generation error:", error);
             const errorMessage = error instanceof Error ? error.message : "콘텐츠 생성 중 오류가 발생했습니다.";
             alert(errorMessage);
-            // 모든 단계를 pending으로 리셋
             setGenerationSteps([
                 {
                     id: "search",
@@ -3070,12 +3061,12 @@ function WorkspaceContent() {
                                                 className: "h-5 w-5 text-primary-foreground"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/workspace/page.tsx",
-                                                lineNumber: 334,
+                                                lineNumber: 330,
                                                 columnNumber: 17
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/app/workspace/page.tsx",
-                                            lineNumber: 333,
+                                            lineNumber: 329,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3083,13 +3074,13 @@ function WorkspaceContent() {
                                             children: "WatchBlogger"
                                         }, void 0, false, {
                                             fileName: "[project]/app/workspace/page.tsx",
-                                            lineNumber: 336,
+                                            lineNumber: 332,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/workspace/page.tsx",
-                                    lineNumber: 332,
+                                    lineNumber: 328,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3097,7 +3088,7 @@ function WorkspaceContent() {
                                     children: "/"
                                 }, void 0, false, {
                                     fileName: "[project]/app/workspace/page.tsx",
-                                    lineNumber: 340,
+                                    lineNumber: 336,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3105,13 +3096,13 @@ function WorkspaceContent() {
                                     children: "워크스페이스"
                                 }, void 0, false, {
                                     fileName: "[project]/app/workspace/page.tsx",
-                                    lineNumber: 343,
+                                    lineNumber: 339,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/workspace/page.tsx",
-                            lineNumber: 331,
+                            lineNumber: 327,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3125,12 +3116,12 @@ function WorkspaceContent() {
                                         className: "h-5 w-5"
                                     }, void 0, false, {
                                         fileName: "[project]/app/workspace/page.tsx",
-                                        lineNumber: 353,
+                                        lineNumber: 345,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/workspace/page.tsx",
-                                    lineNumber: 348,
+                                    lineNumber: 344,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$wordpress$2d$settings$2d$modal$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["WordPressSettingsModal"], {
@@ -3142,35 +3133,35 @@ function WorkspaceContent() {
                                             className: "h-5 w-5"
                                         }, void 0, false, {
                                             fileName: "[project]/app/workspace/page.tsx",
-                                            lineNumber: 362,
+                                            lineNumber: 350,
                                             columnNumber: 19
                                         }, void 0)
                                     }, void 0, false, {
                                         fileName: "[project]/app/workspace/page.tsx",
-                                        lineNumber: 357,
+                                        lineNumber: 349,
                                         columnNumber: 17
                                     }, void 0),
                                     onSave: (settings)=>setWpSettings(settings)
                                 }, void 0, false, {
                                     fileName: "[project]/app/workspace/page.tsx",
-                                    lineNumber: 355,
+                                    lineNumber: 347,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/workspace/page.tsx",
-                            lineNumber: 347,
+                            lineNumber: 343,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/workspace/page.tsx",
-                    lineNumber: 330,
+                    lineNumber: 326,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/workspace/page.tsx",
-                lineNumber: 329,
+                lineNumber: 325,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
@@ -3184,14 +3175,14 @@ function WorkspaceContent() {
                                 className: "h-4 w-4"
                             }, void 0, false, {
                                 fileName: "[project]/app/workspace/page.tsx",
-                                lineNumber: 378,
+                                lineNumber: 365,
                                 columnNumber: 11
                             }, this),
                             "홈으로 돌아가기"
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/workspace/page.tsx",
-                        lineNumber: 374,
+                        lineNumber: 361,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3220,7 +3211,7 @@ function WorkspaceContent() {
                                             children: index + 1
                                         }, void 0, false, {
                                             fileName: "[project]/app/workspace/page.tsx",
-                                            lineNumber: 397,
+                                            lineNumber: 384,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3228,31 +3219,31 @@ function WorkspaceContent() {
                                             children: label
                                         }, void 0, false, {
                                             fileName: "[project]/app/workspace/page.tsx",
-                                            lineNumber: 410,
+                                            lineNumber: 397,
                                             columnNumber: 19
                                         }, this),
                                         index < 3 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "h-px w-8 bg-border sm:w-12"
                                         }, void 0, false, {
                                             fileName: "[project]/app/workspace/page.tsx",
-                                            lineNumber: 419,
+                                            lineNumber: 406,
                                             columnNumber: 33
                                         }, this)
                                     ]
                                 }, label, true, {
                                     fileName: "[project]/app/workspace/page.tsx",
-                                    lineNumber: 396,
+                                    lineNumber: 383,
                                     columnNumber: 17
                                 }, this);
                             })
                         }, void 0, false, {
                             fileName: "[project]/app/workspace/page.tsx",
-                            lineNumber: 384,
+                            lineNumber: 371,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/workspace/page.tsx",
-                        lineNumber: 383,
+                        lineNumber: 370,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3269,7 +3260,7 @@ function WorkspaceContent() {
                                                 children: "시계 정보 입력"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/workspace/page.tsx",
-                                                lineNumber: 431,
+                                                lineNumber: 418,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3277,7 +3268,7 @@ function WorkspaceContent() {
                                                 children: "포스팅할 시계의 모델명을 입력하세요."
                                             }, void 0, false, {
                                                 fileName: "[project]/app/workspace/page.tsx",
-                                                lineNumber: 434,
+                                                lineNumber: 421,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3291,7 +3282,7 @@ function WorkspaceContent() {
                                                                 children: "모델명 *"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/workspace/page.tsx",
-                                                                lineNumber: 441,
+                                                                lineNumber: 428,
                                                                 columnNumber: 19
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3305,7 +3296,7 @@ function WorkspaceContent() {
                                                                         disabled: step !== "input"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/workspace/page.tsx",
-                                                                        lineNumber: 443,
+                                                                        lineNumber: 430,
                                                                         columnNumber: 21
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -3316,24 +3307,24 @@ function WorkspaceContent() {
                                                                             className: "h-4 w-4 animate-spin"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/workspace/page.tsx",
-                                                                            lineNumber: 458,
+                                                                            lineNumber: 443,
                                                                             columnNumber: 25
                                                                         }, this) : "검색"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/workspace/page.tsx",
-                                                                        lineNumber: 450,
+                                                                        lineNumber: 437,
                                                                         columnNumber: 21
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/workspace/page.tsx",
-                                                                lineNumber: 442,
+                                                                lineNumber: 429,
                                                                 columnNumber: 19
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/workspace/page.tsx",
-                                                        lineNumber: 440,
+                                                        lineNumber: 427,
                                                         columnNumber: 17
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3344,7 +3335,7 @@ function WorkspaceContent() {
                                                                 children: "별명 / 한글명 (선택)"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/workspace/page.tsx",
-                                                                lineNumber: 468,
+                                                                lineNumber: 453,
                                                                 columnNumber: 19
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -3355,13 +3346,13 @@ function WorkspaceContent() {
                                                                 disabled: step !== "input" && step !== "confirm"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/workspace/page.tsx",
-                                                                lineNumber: 469,
+                                                                lineNumber: 454,
                                                                 columnNumber: 19
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/workspace/page.tsx",
-                                                        lineNumber: 467,
+                                                        lineNumber: 452,
                                                         columnNumber: 17
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3374,7 +3365,7 @@ function WorkspaceContent() {
                                                                 disabled: step !== "input" && step !== "confirm"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/workspace/page.tsx",
-                                                                lineNumber: 480,
+                                                                lineNumber: 465,
                                                                 columnNumber: 19
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Label"], {
@@ -3383,26 +3374,168 @@ function WorkspaceContent() {
                                                                 children: "이미지 수집 포함"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/workspace/page.tsx",
-                                                                lineNumber: 488,
+                                                                lineNumber: 473,
                                                                 columnNumber: 19
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/workspace/page.tsx",
-                                                        lineNumber: 479,
+                                                        lineNumber: 464,
                                                         columnNumber: 17
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/workspace/page.tsx",
-                                                lineNumber: 438,
+                                                lineNumber: 425,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/workspace/page.tsx",
-                                        lineNumber: 430,
+                                        lineNumber: 417,
                                         columnNumber: 13
+                                    }, this),
+                                    (step === "confirm" || step === "input") && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "rounded-xl border border-border bg-card p-6",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                                                className: "font-serif text-xl font-semibold text-foreground",
+                                                children: "글 작성 스타일 설정"
+                                            }, void 0, false, {
+                                                fileName: "[project]/app/workspace/page.tsx",
+                                                lineNumber: 483,
+                                                columnNumber: 18
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                className: "mt-1 text-sm text-muted-foreground mb-4",
+                                                children: "AI가 작성할 글의 분위기와 분량을 설정합니다."
+                                            }, void 0, false, {
+                                                fileName: "[project]/app/workspace/page.tsx",
+                                                lineNumber: 486,
+                                                columnNumber: 17
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "grid grid-cols-1 md:grid-cols-2 gap-4",
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "space-y-2",
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Label"], {
+                                                                htmlFor: "toneSelect",
+                                                                children: "글의 분위기 (Tone)"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/app/workspace/page.tsx",
+                                                                lineNumber: 493,
+                                                                columnNumber: 21
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
+                                                                id: "toneSelect",
+                                                                value: tone,
+                                                                onChange: (e)=>setTone(e.target.value),
+                                                                disabled: step !== "input" && step !== "confirm",
+                                                                className: "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+                                                                children: [
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                                        value: "informative",
+                                                                        children: "📰 전문적인 정보 (기자)"
+                                                                    }, void 0, false, {
+                                                                        fileName: "[project]/app/workspace/page.tsx",
+                                                                        lineNumber: 501,
+                                                                        columnNumber: 23
+                                                                    }, this),
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                                        value: "storytelling",
+                                                                        children: "☕ 경험담/스토리 (블로거)"
+                                                                    }, void 0, false, {
+                                                                        fileName: "[project]/app/workspace/page.tsx",
+                                                                        lineNumber: 502,
+                                                                        columnNumber: 23
+                                                                    }, this),
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                                        value: "critical",
+                                                                        children: "⚖️ 장단점 분석 (평론가)"
+                                                                    }, void 0, false, {
+                                                                        fileName: "[project]/app/workspace/page.tsx",
+                                                                        lineNumber: 503,
+                                                                        columnNumber: 23
+                                                                    }, this),
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                                        value: "friendly",
+                                                                        children: "😊 친근한 설명 (이웃)"
+                                                                    }, void 0, false, {
+                                                                        fileName: "[project]/app/workspace/page.tsx",
+                                                                        lineNumber: 504,
+                                                                        columnNumber: 23
+                                                                    }, this)
+                                                                ]
+                                                            }, void 0, true, {
+                                                                fileName: "[project]/app/workspace/page.tsx",
+                                                                lineNumber: 494,
+                                                                columnNumber: 21
+                                                            }, this)
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/app/workspace/page.tsx",
+                                                        lineNumber: 492,
+                                                        columnNumber: 19
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "space-y-2",
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Label"], {
+                                                                htmlFor: "depthSelect",
+                                                                children: "글 분량 (Depth)"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/app/workspace/page.tsx",
+                                                                lineNumber: 510,
+                                                                columnNumber: 21
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
+                                                                id: "depthSelect",
+                                                                value: depth,
+                                                                onChange: (e)=>setDepth(e.target.value),
+                                                                disabled: step !== "input" && step !== "confirm",
+                                                                className: "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+                                                                children: [
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                                        value: "deep",
+                                                                        children: "📚 심층 분석 (1500자+)"
+                                                                    }, void 0, false, {
+                                                                        fileName: "[project]/app/workspace/page.tsx",
+                                                                        lineNumber: 518,
+                                                                        columnNumber: 23
+                                                                    }, this),
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                                        value: "basic",
+                                                                        children: "⚡ 기본 작성 (800자)"
+                                                                    }, void 0, false, {
+                                                                        fileName: "[project]/app/workspace/page.tsx",
+                                                                        lineNumber: 519,
+                                                                        columnNumber: 23
+                                                                    }, this)
+                                                                ]
+                                                            }, void 0, true, {
+                                                                fileName: "[project]/app/workspace/page.tsx",
+                                                                lineNumber: 511,
+                                                                columnNumber: 21
+                                                            }, this)
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/app/workspace/page.tsx",
+                                                        lineNumber: 509,
+                                                        columnNumber: 19
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/app/workspace/page.tsx",
+                                                lineNumber: 490,
+                                                columnNumber: 17
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/app/workspace/page.tsx",
+                                        lineNumber: 482,
+                                        columnNumber: 15
                                     }, this),
                                     (step === "confirm" || step === "input") && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         className: "rounded-xl border border-border bg-card p-6",
@@ -3412,7 +3545,7 @@ function WorkspaceContent() {
                                                 children: "템플릿 선택"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/workspace/page.tsx",
-                                                lineNumber: 501,
+                                                lineNumber: 529,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3420,7 +3553,7 @@ function WorkspaceContent() {
                                                 children: "콘텐츠 유형에 맞는 템플릿을 선택하세요."
                                             }, void 0, false, {
                                                 fileName: "[project]/app/workspace/page.tsx",
-                                                lineNumber: 504,
+                                                lineNumber: 532,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3430,18 +3563,18 @@ function WorkspaceContent() {
                                                     onChange: setSelectedTemplate
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/workspace/page.tsx",
-                                                    lineNumber: 508,
+                                                    lineNumber: 536,
                                                     columnNumber: 19
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/app/workspace/page.tsx",
-                                                lineNumber: 507,
+                                                lineNumber: 535,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/workspace/page.tsx",
-                                        lineNumber: 500,
+                                        lineNumber: 528,
                                         columnNumber: 15
                                     }, this),
                                     step === "generating" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3452,7 +3585,7 @@ function WorkspaceContent() {
                                                 children: "생성 진행 상황"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/workspace/page.tsx",
-                                                lineNumber: 519,
+                                                lineNumber: 547,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3460,7 +3593,7 @@ function WorkspaceContent() {
                                                 children: "콘텐츠를 생성하고 있습니다. 잠시만 기다려주세요."
                                             }, void 0, false, {
                                                 fileName: "[project]/app/workspace/page.tsx",
-                                                lineNumber: 522,
+                                                lineNumber: 550,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3470,24 +3603,24 @@ function WorkspaceContent() {
                                                     currentStep: ""
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/workspace/page.tsx",
-                                                    lineNumber: 526,
+                                                    lineNumber: 554,
                                                     columnNumber: 19
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/app/workspace/page.tsx",
-                                                lineNumber: 525,
+                                                lineNumber: 553,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/workspace/page.tsx",
-                                        lineNumber: 518,
+                                        lineNumber: 546,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/workspace/page.tsx",
-                                lineNumber: 429,
+                                lineNumber: 416,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3501,7 +3634,7 @@ function WorkspaceContent() {
                                                     className: "h-12 w-12 text-muted-foreground/50"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/workspace/page.tsx",
-                                                    lineNumber: 537,
+                                                    lineNumber: 565,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3509,18 +3642,18 @@ function WorkspaceContent() {
                                                     children: "모델명을 입력하고 검색을 시작하세요."
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/workspace/page.tsx",
-                                                    lineNumber: 538,
+                                                    lineNumber: 566,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/workspace/page.tsx",
-                                            lineNumber: 536,
+                                            lineNumber: 564,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/workspace/page.tsx",
-                                        lineNumber: 535,
+                                        lineNumber: 563,
                                         columnNumber: 15
                                     }, this),
                                     step === "confirm" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$model$2d$confirm$2d$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ModelConfirmCard"], {
@@ -3531,7 +3664,7 @@ function WorkspaceContent() {
                                         onRetry: handleRetry
                                     }, void 0, false, {
                                         fileName: "[project]/app/workspace/page.tsx",
-                                        lineNumber: 546,
+                                        lineNumber: 574,
                                         columnNumber: 15
                                     }, this),
                                     step === "generating" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3543,7 +3676,7 @@ function WorkspaceContent() {
                                                     className: "h-12 w-12 animate-spin text-accent"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/workspace/page.tsx",
-                                                    lineNumber: 558,
+                                                    lineNumber: 586,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3551,7 +3684,7 @@ function WorkspaceContent() {
                                                     children: "콘텐츠 생성 중..."
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/workspace/page.tsx",
-                                                    lineNumber: 559,
+                                                    lineNumber: 587,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3559,18 +3692,18 @@ function WorkspaceContent() {
                                                     children: "약 30초 정도 소요됩니다."
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/workspace/page.tsx",
-                                                    lineNumber: 562,
+                                                    lineNumber: 590,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/workspace/page.tsx",
-                                            lineNumber: 557,
+                                            lineNumber: 585,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/workspace/page.tsx",
-                                        lineNumber: 556,
+                                        lineNumber: 584,
                                         columnNumber: 15
                                     }, this),
                                     step === "completed" && generationResult && wpSettings && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
@@ -3583,7 +3716,7 @@ function WorkspaceContent() {
                                                 onNewGeneration: handleNewGeneration
                                             }, void 0, false, {
                                                 fileName: "[project]/app/workspace/page.tsx",
-                                                lineNumber: 571,
+                                                lineNumber: 599,
                                                 columnNumber: 17
                                             }, this),
                                             showImagePreview && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3597,7 +3730,7 @@ function WorkspaceContent() {
                                                                 children: "생성된 콘텐츠 및 이미지"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/workspace/page.tsx",
-                                                                lineNumber: 581,
+                                                                lineNumber: 609,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -3607,13 +3740,13 @@ function WorkspaceContent() {
                                                                 children: "닫기"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/workspace/page.tsx",
-                                                                lineNumber: 584,
+                                                                lineNumber: 612,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/workspace/page.tsx",
-                                                        lineNumber: 580,
+                                                        lineNumber: 608,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$content$2d$preview$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ContentPreview"], {
@@ -3626,13 +3759,13 @@ function WorkspaceContent() {
                                                         images: generationResult.images
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/workspace/page.tsx",
-                                                        lineNumber: 592,
+                                                        lineNumber: 620,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/workspace/page.tsx",
-                                                lineNumber: 579,
+                                                lineNumber: 607,
                                                 columnNumber: 19
                                             }, this)
                                         ]
@@ -3640,29 +3773,29 @@ function WorkspaceContent() {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/workspace/page.tsx",
-                                lineNumber: 533,
+                                lineNumber: 561,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/workspace/page.tsx",
-                        lineNumber: 427,
+                        lineNumber: 414,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/workspace/page.tsx",
-                lineNumber: 372,
+                lineNumber: 360,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/workspace/page.tsx",
-        lineNumber: 327,
+        lineNumber: 323,
         columnNumber: 5
     }, this);
 }
-_s(WorkspaceContent, "PquKWc0AXYIxwM+8vK+/rdStlwA=", false, function() {
+_s(WorkspaceContent, "Y/bkvhnnR6kXIC2me5b5iCK4W0U=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSearchParams"],
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"]
@@ -3677,22 +3810,22 @@ function WorkspacePage() {
                 className: "h-8 w-8 animate-spin text-accent"
             }, void 0, false, {
                 fileName: "[project]/app/workspace/page.tsx",
-                lineNumber: 617,
+                lineNumber: 645,
                 columnNumber: 11
             }, void 0)
         }, void 0, false, {
             fileName: "[project]/app/workspace/page.tsx",
-            lineNumber: 616,
+            lineNumber: 644,
             columnNumber: 9
         }, void 0),
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$7_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(WorkspaceContent, {}, void 0, false, {
             fileName: "[project]/app/workspace/page.tsx",
-            lineNumber: 621,
+            lineNumber: 649,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/app/workspace/page.tsx",
-        lineNumber: 614,
+        lineNumber: 642,
         columnNumber: 5
     }, this);
 }
